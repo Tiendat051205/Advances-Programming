@@ -1,0 +1,10 @@
+com/hospital/thesis/ThesisApplication.class
+com/hospital/thesis/controller/AuthController$1.class
+com/hospital/thesis/service/UserService.class
+com/hospital/thesis/repository/UserRepository.class
+com/hospital/thesis/controller/LecturerController.class
+com/hospital/thesis/entity/User.class
+com/hospital/thesis/controller/HomeController.class
+com/hospital/thesis/entity/User$Role.class
+com/hospital/thesis/controller/AuthController.class
+com/hospital/thesis/controller/StudentController.class

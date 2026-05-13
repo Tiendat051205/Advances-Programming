@@ -1,0 +1,432 @@
+<!DOCTYPE html >
+
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"></html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giảng viên - Quản lý luận án | Bệnh viện Nhi Trung ương</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="lecture.css">
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 px-0 sidebar">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                    </div>
+                    <div class="user-name" id="teacherName">PGS.TS. Trần Thị Mai</div>
+                    <div class="user-role">Giảng viên hướng dẫn</div>
+                </div>
+                
+                <div class="nav-menu">
+                    <div class="nav-item active">
+                        <i class="fas fa-list"></i> Quản lý luận án
+                    </div>
+                    <div class="nav-item">
+                        <i class="fas fa-calendar-alt"></i> Lịch hướng dẫn
+                    </div>
+                    <div class="nav-item">
+                        <i class="fas fa-user"></i> Thông tin cá nhân
+                    </div>
+                    <div class="nav-item">
+                        <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="col-md-9 col-lg-10 main-content">
+                <div class="page-header">
+                    <h2><i class="fas fa-chalkboard-teacher"></i> Quản lý luận án</h2>
+                </div>
+                
+                <!-- Success Message -->
+                <div class="alert alert-success" id="successAlert">
+                    <i class="fas fa-check-circle"></i> <span id="alertMessage"></span>
+                </div>
+                
+                <!-- Statistics Cards -->
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <div class="stats-card pending">
+                            <i class="fas fa-clock"></i>
+                            <div class="stats-number" id="pendingCount">0</div>
+                            <div class="stats-label">Chờ xử lý</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stats-card approved">
+                            <i class="fas fa-check-circle"></i>
+                            <div class="stats-number" id="approvedCount">0</div>
+                            <div class="stats-label">Đã duyệt</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stats-card rejected">
+                            <i class="fas fa-times-circle"></i>
+                            <div class="stats-number" id="rejectedCount">0</div>
+                            <div class="stats-label">Đã từ chối</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Search Box -->
+                <div class="search-box">
+                    <input type="text" id="searchInput" class="form-control" placeholder="🔍 Tìm kiếm theo mã giấy, tên đề tài hoặc học viên...">
+                </div>
+                
+                <!-- List of Requests -->
+                <div class="requests-card">
+                    <div class="card-header">
+                        <i class="fas fa-file-alt"></i> Danh sách luận án đăng ký
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Mã giấy</th>
+                                    <th>Học viên</th>
+                                    <th>Tên đề tài</th>
+                                    <th>Loại đề tài</th>
+                                    <th>Địa điểm NC</th>
+                                    <th>Khoa/Phòng</th>
+                                    <th>Thời gian</th>
+                                    <th>PP nghiên cứu</th>
+                                    <th>Trạng thái</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="requestsTableBody">
+                                <tr>
+                                    <td colspan="10" class="empty-state">
+                                        <i class="fas fa-inbox"></i><br>
+                                        Chưa có đề nghị luận án nào
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal Xem chi tiết -->
+    <div class="modal fade" id="detailModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-file-alt"></i> Chi tiết luận án</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="detailContent">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Giảng viên hiện tại (sẽ thay bằng session sau)
+        const currentTeacher = "PGS.TS. Trần Thị Mai";
+        
+        // Lấy danh sách đề nghị từ localStorage
+        let allRequests = JSON.parse(localStorage.getItem('thesisRequests')) || [];
+        
+        // Lọc chỉ hiển thị đề nghị có tên giảng viên trùng với giảng viên hiện tại
+        let requests = allRequests.filter(req => req.giangVien === currentTeacher);
+        
+        // Hàm hiển thị thông báo
+        function showAlert(message, isError = false) {
+            const alert = document.getElementById('successAlert');
+            const alertMessage = document.getElementById('alertMessage');
+            alertMessage.textContent = message;
+            alert.style.display = 'block';
+            if (isError) {
+                alert.style.background = '#f8d7da';
+                alert.style.color = '#721c24';
+            } else {
+                alert.style.background = '#d4edda';
+                alert.style.color = '#155724';
+            }
+            setTimeout(() => {
+                alert.style.display = 'none';
+                alert.style.background = '#d4edda';
+                alert.style.color = '#155724';
+            }, 3000);
+        }
+        
+        // Hàm cập nhật thống kê
+        function updateStats() {
+            const pendingCount = requests.filter(r => r.trangThai === 'pending').length;
+            const approvedCount = requests.filter(r => r.trangThai === 'approved').length;
+            const rejectedCount = requests.filter(r => r.trangThai === 'rejected').length;
+            
+            document.getElementById('pendingCount').textContent = pendingCount;
+            document.getElementById('approvedCount').textContent = approvedCount;
+            document.getElementById('rejectedCount').textContent = rejectedCount;
+        }
+        
+        // Hàm hiển thị danh sách
+        function displayRequests(filterText = '') {
+            const tbody = document.getElementById('requestsTableBody');
+            
+            let filteredRequests = requests;
+            
+            if (filterText) {
+                filteredRequests = requests.filter(req => 
+                    req.maGiay.toLowerCase().includes(filterText.toLowerCase()) ||
+                    req.tenDeTai.toLowerCase().includes(filterText.toLowerCase()) ||
+                    (req.studentName && req.studentName.toLowerCase().includes(filterText.toLowerCase()))
+                );
+            }
+            
+            if (filteredRequests.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="10" class="empty-state">
+                    <i class="fas fa-inbox"></i><br>
+                    Không có đề nghị luận án nào
+                </td></tr>`;
+                updateStats();
+                return;
+            }
+            
+            tbody.innerHTML = '';
+            filteredRequests.forEach(request => {
+                const row = tbody.insertRow();
+                row.insertCell(0).innerHTML = `<strong>${request.maGiay}</strong>`;
+                row.insertCell(1).innerHTML = request.studentName || 'Nguyễn Văn A';
+                row.insertCell(2).innerHTML = `<a href="#" class="view-detail" data-id="${request.id}">${request.tenDeTai}</a>`;
+                row.insertCell(3).innerHTML = request.loaiDeTai;
+                row.insertCell(4).innerHTML = request.diaDiem;
+                row.insertCell(5).innerHTML = request.khoaPhong;
+                row.insertCell(6).innerHTML = `${request.tgBatDau}<br><small>đến ${request.tgKetThuc}</small>`;
+                row.insertCell(7).innerHTML = request.ppNghienCuu;
+                row.insertCell(8).innerHTML = getStatusBadge(request.trangThai);
+                row.insertCell(9).innerHTML = getActionButtons(request);
+            });
+            
+            // Gắn sự kiện xem chi tiết
+            document.querySelectorAll('.view-detail').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const id = parseInt(this.getAttribute('data-id'));
+                    showDetail(id);
+                });
+            });
+            
+            updateStats();
+        }
+        
+        // Hàm lấy badge trạng thái
+        function getStatusBadge(status) {
+            switch(status) {
+                case 'pending':
+                    return '<span class="status-badge status-pending"><i class="fas fa-clock"></i> Chờ duyệt</span>';
+                case 'approved':
+                    return '<span class="status-badge status-approved"><i class="fas fa-check"></i> Đã duyệt</span>';
+                case 'rejected':
+                    return '<span class="status-badge status-rejected"><i class="fas fa-times"></i> Từ chối</span>';
+                default:
+                    return '<span class="status-badge status-pending">Chờ duyệt</span>';
+            }
+        }
+        
+        // Hàm lấy nút thao tác
+        function getActionButtons(request) {
+            if (request.trangThai === 'pending') {
+                return `
+                    <button class="btn-approve" onclick="approveRequest(${request.id})">
+                        <i class="fas fa-check"></i> Duyệt
+                    </button>
+                    <button class="btn-reject" onclick="showRejectModal(${request.id})">
+                        <i class="fas fa-times"></i> Từ chối
+                    </button>
+                `;
+            } else if (request.trangThai === 'approved') {
+                return '<span class="text-success"><i class="fas fa-check-circle"></i> Đã duyệt</span>';
+            } else {
+                return '<span class="text-danger"><i class="fas fa-times-circle"></i> Đã từ chối</span>';
+            }
+        }
+        
+        // Hàm duyệt đề nghị
+        function approveRequest(id) {
+            if (confirm('Bạn có chắc chắn muốn DUYỆT đề nghị luận án này?')) {
+                const index = allRequests.findIndex(r => r.id === id);
+                if (index !== -1) {
+                    allRequests[index].trangThai = 'approved';
+                    localStorage.setItem('thesisRequests', JSON.stringify(allRequests));
+                    
+                    // Cập nhật lại danh sách requests hiện tại
+                    requests = allRequests.filter(req => req.giangVien === currentTeacher);
+                    
+                    displayRequests(document.getElementById('searchInput').value);
+                    showAlert('Đã duyệt đề nghị luận án thành công!');
+                }
+            }
+        }
+        
+        // Hàm từ chối đề nghị
+        function rejectRequest(id, reason) {
+            const index = allRequests.findIndex(r => r.id === id);
+            if (index !== -1) {
+                allRequests[index].trangThai = 'rejected';
+                allRequests[index].rejectReason = reason;
+                localStorage.setItem('thesisRequests', JSON.stringify(allRequests));
+                
+                // Cập nhật lại danh sách requests hiện tại
+                requests = allRequests.filter(req => req.giangVien === currentTeacher);
+                
+                displayRequests(document.getElementById('searchInput').value);
+                showAlert('Đã từ chối đề nghị luận án!');
+            }
+        }
+        
+        // Hiển thị modal nhập lý do từ chối
+        function showRejectModal(id) {
+            const reason = prompt('Vui lòng nhập lý do từ chối:', 'Đề tài chưa phù hợp với chuyên môn hướng dẫn');
+            if (reason && reason.trim()) {
+                rejectRequest(id, reason.trim());
+            } else if (reason === '') {
+                alert('Vui lòng nhập lý do từ chối!');
+            }
+        }
+        
+        // Hiển thị chi tiết luận án
+        function showDetail(id) {
+            const request = allRequests.find(r => r.id === id);
+            if (request) {
+                const modal = new bootstrap.Modal(document.getElementById('detailModal'));
+                const detailContent = document.getElementById('detailContent');
+                
+                detailContent.innerHTML = `
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>📄 Mã giấy:</strong> ${request.maGiay}</p>
+                            <p><strong>📝 Tên đề tài:</strong> ${request.tenDeTai}</p>
+                            <p><strong>👨‍🏫 Giảng viên:</strong> ${request.giangVien}</p>
+                            <p><strong>📚 Loại đề tài:</strong> ${request.loaiDeTai}</p>
+                            <p><strong>📍 Địa điểm NC:</strong> ${request.diaDiem}</p>
+                            <p><strong>🏥 Khoa/Phòng:</strong> ${request.khoaPhong}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>👥 Đối tượng:</strong> ${request.doiTuong}</p>
+                            <p><strong>📅 Thời gian bắt đầu:</strong> ${request.tgBatDau}</p>
+                            <p><strong>📅 Thời gian kết thúc:</strong> ${request.tgKetThuc}</p>
+                            <p><strong>🔬 Phương pháp NC:</strong> ${request.ppNghienCuu}</p>
+                            <p><strong>📊 Trạng thái:</strong> ${getStatusBadge(request.trangThai)}</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-12">
+                            <p><strong>📖 Mô tả chi tiết:</strong></p>
+                            <p>${request.moTa || 'Không có mô tả chi tiết'}</p>
+                        </div>
+                    </div>
+                    ${request.rejectReason ? `
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="alert alert-danger">
+                                <strong><i class="fas fa-exclamation-triangle"></i> Lý do từ chối:</strong><br>
+                                ${request.rejectReason}
+                            </div>
+                        </div>
+                    </div>
+                    ` : ''}
+                `;
+                
+                modal.show();
+            }
+        }
+        
+        // Tìm kiếm
+        document.getElementById('searchInput').addEventListener('input', function() {
+            displayRequests(this.value);
+        });
+        
+        // Khởi tạo demo data nếu chưa có
+        function initDemoData() {
+            if (allRequests.length === 0) {
+                allRequests = [
+                    {
+                        id: 1,
+                        maGiay: "LA-2026-001",
+                        tenDeTai: "Nghiên cứu đặc điểm lâm sàng và cận lâm sàng của bệnh viêm phổi ở trẻ em dưới 5 tuổi",
+                        loaiDeTai: "Nghiên cứu lâm sàng",
+                        giangVien: "PGS.TS. Trần Thị Mai",
+                        khoaPhong: "Khoa Nhi",
+                        diaDiem: "Tại bệnh viện",
+                        doiTuong: "Trẻ em (0-16 tuổi)",
+                        tgBatDau: "2026-03-01",
+                        tgKetThuc: "2027-03-01",
+                        ppNghienCuu: "Mô tả cắt ngang",
+                        moTa: "Đánh giá các yếu tố nguy cơ và đặc điểm viêm phổi ở trẻ dưới 5 tuổi",
+                        trangThai: "pending",
+                        studentName: "Nguyễn Thị Bình",
+                        ngayGui: "26/05/2026 09:30"
+                    },
+                    {
+                        id: 2,
+                        maGiay: "LA-2026-002",
+                        tenDeTai: "Ứng dụng kỹ thuật PCR trong chẩn đoán sớm nhiễm khuẩn huyết ở trẻ sơ sinh",
+                        loaiDeTai: "Nghiên cứu ứng dụng",
+                        giangVien: "PGS.TS. Trần Thị Mai",
+                        khoaPhong: "Khoa Xét nghiệm",
+                        diaDiem: "Phòng thí nghiệm",
+                        doiTuong: "Trẻ sơ sinh (0-12 tháng)",
+                        tgBatDau: "2026-04-15",
+                        tgKetThuc: "2027-04-15",
+                        ppNghienCuu: "Thử nghiệm lâm sàng",
+                        moTa: "Phát triển quy trình PCR phát hiện sớm vi khuẩn trong máu",
+                        trangThai: "approved",
+                        studentName: "Trần Văn Cường",
+                        ngayGui: "20/05/2026 14:15"
+                    },
+                    {
+                        id: 3,
+                        maGiay: "LA-2026-003",
+                        tenDeTai: "Đánh giá hiệu quả của phương pháp vật lý trị liệu hô hấp trên trẻ hen phế quản",
+                        loaiDeTai: "Nghiên cứu thực nghiệm",
+                        giangVien: "PGS.TS. Trần Thị Mai",
+                        khoaPhong: "Khoa Nội",
+                        diaDiem: "Tại bệnh viện",
+                        doiTuong: "Trẻ lớn (6-16 tuổi)",
+                        tgBatDau: "2026-05-01",
+                        tgKetThuc: "2026-11-01",
+                        ppNghienCuu: "Nghiên cứu đoàn hệ",
+                        moTa: "Theo dõi và đánh giá hiệu quả điều trị hen phế quản bằng vật lý trị liệu",
+                        trangThai: "rejected",
+                        studentName: "Lê Thị Dung",
+                        ngayGui: "18/05/2026 10:00",
+                        rejectReason: "Đề tài chưa phù hợp với chuyên môn hướng dẫn, đề nghị đổi hướng nghiên cứu"
+                    }
+                ];
+                localStorage.setItem('thesisRequests', JSON.stringify(allRequests));
+            }
+            
+            // Cập nhật lại requests sau khi lấy từ localStorage
+            allRequests = JSON.parse(localStorage.getItem('thesisRequests'));
+            requests = allRequests.filter(req => req.giangVien === currentTeacher);
+        }
+        
+        // Khởi tạo
+        initDemoData();
+        displayRequests();
+    </script>
+</body>
+</html>

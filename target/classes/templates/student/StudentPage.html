@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"></html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Học viên - Đăng ký luận án | Bệnh viện Nhi Trung ương</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="student.css">
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 px-0 sidebar">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <div class="user-name">Nguyễn Văn A</div>
+                    <div class="user-role">Học viên - NCS</div>
+                </div>
+                
+                <div class="nav-menu">
+                    <div class="nav-item active">
+                        <i class="fas fa-file-alt"></i> Đăng ký luận án
+                    </div>
+                    <div class="nav-item">
+                        <i class="fas fa-list"></i> Danh sách đề nghị
+                    </div>
+                    <div class="nav-item">
+                        <i class="fas fa-calendar-alt"></i> Lịch bảo vệ
+                    </div>
+                    <div class="nav-item">
+                        <i class="fas fa-user"></i> Thông tin cá nhân
+                    </div>
+                    <div class="nav-item">
+                        <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="col-md-9 col-lg-10 main-content">
+                <div class="page-header">
+                    <h2><i class="fas fa-file-alt"></i> Đăng ký luận án</h2>
+                </div>
+                
+                <!-- Success Message -->
+                <div class="alert alert-success" id="successAlert">
+                    <i class="fas fa-check-circle"></i> Gửi đề nghị thành công!
+                </div>
+                
+                <!-- Form Đăng ký -->
+                <div class="form-card">
+                    <div class="form-card-header">
+                        <i class="fas fa-pen"></i> Giấy đề nghị - Đăng ký luận án
+                    </div>
+                    <div class="form-card-body">
+                        <form id="thesisForm">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Mã giấy <span class="required">*</span></label>
+                                        <input type="text" class="form-control" id="maGiay" placeholder="VD: LA-2026-001" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Loại đề tài <span class="required">*</span></label>
+                                        <select class="form-select" id="loaiDeTai" required>
+                                            <option value="">Chọn loại đề tài</option>
+                                            <option value="nghien-cuu-co-ban">Nghiên cứu cơ bản</option>
+                                            <option value="nghien-cuu-ung-dung">Nghiên cứu ứng dụng</option>
+                                            <option value="nghien-cuu-lam-sang">Nghiên cứu lâm sàng</option>
+                                            <option value="nghien-cuu-thuc-nghiem">Nghiên cứu thực nghiệm</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label>Tên đề tài <span class="required">*</span></label>
+                                        <input type="text" class="form-control" id="tenDeTai" placeholder="Nhập tên đề tài luận án" required>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Giảng viên hướng dẫn <span class="required">*</span></label>
+                                        <select class="form-select" id="giangVien" required>
+                                            <option value="">Chọn giảng viên</option>
+                                            <option value="TS. Nguyễn Văn Hùng">TS. Nguyễn Văn Hùng - Trưởng khoa Nhi</option>
+                                            <option value="PGS.TS. Trần Thị Mai">PGS.TS. Trần Thị Mai - Phó khoa Nội</option>
+                                            <option value="GS.TS. Lê Văn Thành">GS.TS. Lê Văn Thành - Chuyên gia cao cấp</option>
+                                            <option value="TS. Phạm Thị Lan">TS. Phạm Thị Lan - Trưởng phòng Nghiên cứu</option>
+                                            <option value="BS. CKII. Hoàng Văn Nam">BS. CKII. Hoàng Văn Nam - Khoa Ngoại</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Khoa/Phòng <span class="required">*</span></label>
+                                        <select class="form-select" id="khoaPhong" required>
+                                            <option value="">Chọn khoa/phòng</option>
+                                            <option value="khoa-nhi">Khoa Nhi</option>
+                                            <option value="khoa-noi">Khoa Nội</option>
+                                            <option value="khoa-ngoai">Khoa Ngoại</option>
+                                            <option value="khoa-dong-y">Khoa Đông y</option>
+                                            <option value="khoa-xet-nghiem">Khoa Xét nghiệm</option>
+                                            <option value="phong-nghien-cuu">Phòng Nghiên cứu khoa học</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Địa điểm NC <span class="required">*</span></label>
+                                        <select class="form-select" id="diaDiem" required>
+                                            <option value="">Chọn địa điểm</option>
+                                            <option value="benh-vien">Tại bệnh viện</option>
+                                            <option value="phong-thi-nghiem">Phòng thí nghiệm</option>
+                                            <option value="co-so-2">Cơ sở 2 - Thanh Trì</option>
+                                            <option value="co-so-3">Cơ sở 3 - Đông Anh</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Đối tượng <span class="required">*</span></label>
+                                        <select class="form-select" id="doiTuong" required>
+                                            <option value="">Chọn đối tượng</option>
+                                            <option value="tre-em">Trẻ em (0-16 tuổi)</option>
+                                            <option value="so-sinh">Trẻ sơ sinh (0-12 tháng)</option>
+                                            <option value="tre-nho">Trẻ nhỏ (1-5 tuổi)</option>
+                                            <option value="tre-lon">Trẻ lớn (6-16 tuổi)</option>
+                                            <option value="phu-huynh">Phụ huynh/người chăm sóc</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Thời gian bắt đầu <span class="required">*</span></label>
+                                        <input type="date" class="form-control" id="tgBatDau" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Thời gian kết thúc <span class="required">*</span></label>
+                                        <input type="date" class="form-control" id="tgKetThuc" required>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label>Phương pháp nghiên cứu <span class="required">*</span></label>
+                                        <select class="form-select" id="ppNghienCuu" required>
+                                            <option value="">Chọn phương pháp</option>
+                                            <option value="mo-ta-cat-ngang">Mô tả cắt ngang</option>
+                                            <option value="nghien-cuu-doan-he">Nghiên cứu đoàn hệ</option>
+                                            <option value="thu-nghiem-lam-sang">Thử nghiệm lâm sàng</option>
+                                            <option value="nghien-cuu-benh-chung">Nghiên cứu bệnh chứng</option>
+                                            <option value="nghien-cuu-tuong-thuat">Nghiên cứu tường thuật</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label>Mô tả chi tiết</label>
+                                        <textarea class="form-control" id="moTa" placeholder="Mô tả chi tiết về đề tài luận án..."></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <button type="submit" class="btn-submit">
+                                    <i class="fas fa-paper-plane"></i> Gửi đề nghị
+                                </button>
+                                <button type="button" class="btn-reset" id="resetBtn">
+                                    <i class="fas fa-undo-alt"></i> Nhập lại
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Danh sách đề nghị đã gửi -->
+                <div class="form-card">
+                    <div class="form-card-header">
+                        <i class="fas fa-history"></i> Danh sách đề nghị đã gửi
+                    </div>
+                    <div class="requests-table">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Mã giấy</th>
+                                    <th>Tên đề tài</th>
+                                    <th>Giảng viên</th>
+                                    <th>Loại đề tài</th>
+                                    <th>Địa điểm NC</th>
+                                    <th>Khoa/Phòng</th>
+                                    <th>Đối tượng</th>
+                                    <th>Trạng thái</th>
+                                    <th>TG bắt đầu</th>
+                                    <th>TG kết thúc</th>
+                                    <th>PP nghiên cứu</th>
+                                </tr>
+                            </thead>
+                            <tbody id="requestsTableBody">
+                                <tr>
+                                    <td colspan="11" class="text-center text-muted">Chưa có đề nghị nào</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Lưu trữ danh sách đề nghị
+        let requests = JSON.parse(localStorage.getItem('thesisRequests')) || [];
+        
+        // Hiển thị danh sách đề nghị
+        function displayRequests() {
+            const tbody = document.getElementById('requestsTableBody');
+            
+            if (requests.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="11" class="text-center text-muted">Chưa có đề nghị nào</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = '';
+            requests.forEach(request => {
+                const row = tbody.insertRow();
+                row.insertCell(0).innerHTML = request.maGiay;
+                row.insertCell(1).innerHTML = request.tenDeTai;
+                row.insertCell(2).innerHTML = request.giangVien;
+                row.insertCell(3).innerHTML = request.loaiDeTai;
+                row.insertCell(4).innerHTML = request.diaDiem;
+                row.insertCell(5).innerHTML = request.khoaPhong;
+                row.insertCell(6).innerHTML = request.doiTuong;
+                row.insertCell(7).innerHTML = `<span class="status-badge status-${request.trangThai}">${request.trangThai === 'pending' ? 'Chờ duyệt' : (request.trangThai === 'approved' ? 'Đã duyệt' : 'Từ chối')}</span>`;
+                row.insertCell(8).innerHTML = request.tgBatDau;
+                row.insertCell(9).innerHTML = request.tgKetThuc;
+                row.insertCell(10).innerHTML = request.ppNghienCuu;
+            });
+        }
+        
+        // Hiển thị thông báo
+        function showSuccess(message) {
+            const alert = document.getElementById('successAlert');
+            alert.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
+            alert.style.display = 'block';
+            setTimeout(() => {
+                alert.style.display = 'none';
+            }, 3000);
+        }
+        
+        // Reset form
+        document.getElementById('resetBtn').addEventListener('click', function() {
+            document.getElementById('thesisForm').reset();
+        });
+        
+        // Xử lý submit form
+        document.getElementById('thesisForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Lấy giá trị từ form
+            const maGiay = document.getElementById('maGiay').value;
+            const tenDeTai = document.getElementById('tenDeTai').value;
+            const loaiDeTai = document.getElementById('loaiDeTai').options[document.getElementById('loaiDeTai').selectedIndex].text;
+            const giangVien = document.getElementById('giangVien').options[document.getElementById('giangVien').selectedIndex].text;
+            const khoaPhong = document.getElementById('khoaPhong').options[document.getElementById('khoaPhong').selectedIndex].text;
+            const diaDiem = document.getElementById('diaDiem').options[document.getElementById('diaDiem').selectedIndex].text;
+            const doiTuong = document.getElementById('doiTuong').options[document.getElementById('doiTuong').selectedIndex].text;
+            const tgBatDau = document.getElementById('tgBatDau').value;
+            const tgKetThuc = document.getElementById('tgKetThuc').value;
+            const ppNghienCuu = document.getElementById('ppNghienCuu').options[document.getElementById('ppNghienCuu').selectedIndex].text;
+            const moTa = document.getElementById('moTa').value;
+            
+            // Validate
+            if (!maGiay || !tenDeTai || !loaiDeTai || !giangVien || !khoaPhong || !diaDiem || !doiTuong || !tgBatDau || !tgKetThuc || !ppNghienCuu) {
+                alert('Vui lòng điền đầy đủ thông tin bắt buộc!');
+                return;
+            }
+            
+            // Kiểm tra ngày
+            if (new Date(tgBatDau) > new Date(tgKetThuc)) {
+                alert('Ngày bắt đầu phải nhỏ hơn ngày kết thúc!');
+                return;
+            }
+            
+            // Tạo đối tượng request
+            const newRequest = {
+                id: Date.now(),
+                maGiay,
+                tenDeTai,
+                loaiDeTai: loaiDeTai,
+                giangVien: giangVien,
+                khoaPhong: khoaPhong,
+                diaDiem: diaDiem,
+                doiTuong: doiTuong,
+                tgBatDau,
+                tgKetThuc,
+                ppNghienCuu: ppNghienCuu,
+                moTa,
+                trangThai: 'pending',
+                ngayGui: new Date().toLocaleString('vi-VN')
+            };
+            
+            // Thêm vào danh sách
+            requests.unshift(newRequest);
+            localStorage.setItem('thesisRequests', JSON.stringify(requests));
+            
+            // Hiển thị lại danh sách
+            displayRequests();
+            
+            // Reset form
+            document.getElementById('thesisForm').reset();
+            
+            // Hiển thị thông báo
+            showSuccess('Gửi đề nghị thành công! Đề nghị của bạn đã được chuyển đến giảng viên và admin.');
+        });
+        
+        // Hiển thị danh sách khi load trang
+        displayRequests();
+        
+        // Set ngày mặc định
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('tgBatDau').value = today;
+        
+        // Cập nhật ngày kết thúc mặc định (1 năm sau)
+        const nextYear = new Date();
+        nextYear.setFullYear(nextYear.getFullYear() + 1);
+        document.getElementById('tgKetThuc').value = nextYear.toISOString().split('T')[0];
+        
+        // Sidebar navigation
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
