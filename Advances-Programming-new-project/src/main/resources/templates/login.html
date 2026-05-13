@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập - Quản lý đề tài nghiên cứu tại Bệnh viện Nhi Trung ương</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+          rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/css/login.css}">
+</head>
+
+<body>
+
+<div class="login-container">
+
+    <div class="login-card">
+
+        <!-- HEADER -->
+        <div class="login-header">
+            <i class="fas fa-hospital-user"></i>
+            <h3>Đăng nhập hệ thống</h3>
+            <p></p>Bệnh viện Nhi Trung ương</p>
+        </div>
+
+        <!-- BODY -->
+        <div class="login-body">
+
+            <!-- ERROR MESSAGE -->
+            <div th:if="${error}" class="alert alert-danger">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span th:text="${error}"></span>
+            </div>
+
+            <!-- LOGIN FORM -->
+            <form th:action="@{/do-login}" method="post">
+
+                <!-- USERNAME -->
+                <div class="form-group mb-3">
+
+                    <label class="mb-2">Nhập email</label>
+
+                    <div class="input-group">
+
+                        <span class="input-group-text">
+                            <i class="fas fa-user"></i>
+                        </span>
+
+                        <input type="text"
+                               class="form-control"
+                               id="username"
+                               name="userName"
+                               placeholder="Nhập email"
+                               required>
+
+                    </div>
+                </div>
+
+                <!-- PASSWORD -->
+                <div class="form-group mb-3">
+
+                    <label class="mb-2">Mật khẩu</label>
+
+                    <div class="input-group">
+
+                        <span class="input-group-text">
+                            <i class="fas fa-lock"></i>
+                        </span>
+
+                        <input type="password"
+                               class="form-control"
+                               id="password"
+                               name="password"
+                               placeholder="Nhập mật khẩu"
+                               required>
+
+                        <span class="input-group-text"
+                              id="togglePassword"
+                              style="cursor:pointer;">
+
+                            <i class="fas fa-eye"></i>
+
+                        </span>
+
+                    </div>
+                </div>
+
+                <!-- REMEMBER -->
+                <div class="d-flex justify-content-between align-items-center mb-3">
+
+                    <div class="form-check">
+
+                        <input class="form-check-input"
+                               type="checkbox"
+                               id="rememberMe">
+
+                        <label class="form-check-label" for="rememberMe">
+                            Ghi nhớ đăng nhập
+                        </label>
+
+                    </div>
+
+                    <a href="#" class="text-decoration-none">
+                        Quên mật khẩu?
+                    </a>
+
+                </div>
+
+                <!-- BUTTON -->
+                <button type="submit" class="btn btn-primary w-100">
+
+                    <i class="fas fa-sign-in-alt"></i>
+                    Đăng nhập
+
+                </button>
+
+            </form>
+
+        </div>
+    </div>
+
+    <!-- BACK HOME -->
+    <div class="text-center mt-3">
+
+        <a th:href="@{/}" class="text-decoration-none">
+
+            <i class="fas fa-arrow-left"></i>
+            Quay lại trang chủ
+
+        </a>
+
+    </div>
+
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+
+    // Toggle password visibility
+    const togglePassword = document.getElementById('togglePassword');
+
+    const passwordInput = document.getElementById('password');
+
+    togglePassword.addEventListener('click', function () {
+
+        const type =
+            passwordInput.getAttribute('type') === 'password'
+                ? 'text'
+                : 'password';
+
+        passwordInput.setAttribute('type', type);
+
+        this.querySelector('i').classList.toggle('fa-eye');
+        this.querySelector('i').classList.toggle('fa-eye-slash');
+    });
+
+</script>
+
+</body>
+</html>
