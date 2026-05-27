@@ -1,0 +1,17 @@
+/Users/macbookair/Downloads/Advances-Programming-ver1/Advances-Programming-new-project/src/main/java/com/hospital/thesis/entity/ResearchProposal.java
+/Users/macbookair/Downloads/Advances-Programming-ver1/Advances-Programming-new-project/src/main/java/com/hospital/thesis/controller/LecturerController.java
+/Users/macbookair/Downloads/Advances-Programming-ver1/Advances-Programming-new-project/src/main/java/com/hospital/thesis/controller/StudentController.java
+/Users/macbookair/Downloads/Advances-Programming-ver1/Advances-Programming-new-project/src/main/java/com/hospital/thesis/controller/ResearchProposalController.java
+/Users/macbookair/Downloads/Advances-Programming-ver1/Advances-Programming-new-project/src/main/java/com/hospital/thesis/controller/HomeController.java
+/Users/macbookair/Downloads/Advances-Programming-ver1/Advances-Programming-new-project/src/main/java/com/hospital/thesis/ThesisApplication.java
+/Users/macbookair/Downloads/Advances-Programming-ver1/Advances-Programming-new-project/src/main/java/com/hospital/thesis/Repository/LecturerRepository.java
+/Users/macbookair/Downloads/Advances-Programming-ver1/Advances-Programming-new-project/src/main/java/com/hospital/thesis/entity/Lecturer.java
+/Users/macbookair/Downloads/Advances-Programming-ver1/Advances-Programming-new-project/src/main/java/com/hospital/thesis/entity/Student.java
+/Users/macbookair/Downloads/Advances-Programming-ver1/Advances-Programming-new-project/src/main/java/com/hospital/thesis/Repository/ResearchProposalRepository.java
+/Users/macbookair/Downloads/Advances-Programming-ver1/Advances-Programming-new-project/src/main/java/com/hospital/thesis/Repository/UserRepository.java
+/Users/macbookair/Downloads/Advances-Programming-ver1/Advances-Programming-new-project/src/main/java/com/hospital/thesis/service/UserService.java
+/Users/macbookair/Downloads/Advances-Programming-ver1/Advances-Programming-new-project/src/main/java/com/hospital/thesis/Repository/AdminDepartmentRepository.java
+/Users/macbookair/Downloads/Advances-Programming-ver1/Advances-Programming-new-project/src/main/java/com/hospital/thesis/entity/User.java
+/Users/macbookair/Downloads/Advances-Programming-ver1/Advances-Programming-new-project/src/main/java/com/hospital/thesis/entity/AdminDepartment.java
+/Users/macbookair/Downloads/Advances-Programming-ver1/Advances-Programming-new-project/src/main/java/com/hospital/thesis/controller/AuthController.java
+/Users/macbookair/Downloads/Advances-Programming-ver1/Advances-Programming-new-project/src/main/java/com/hospital/thesis/Repository/StudentRepository.java
